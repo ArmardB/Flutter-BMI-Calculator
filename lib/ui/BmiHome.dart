@@ -13,6 +13,7 @@ class BMIState extends State<BmiHome> {
 
 
   double _bmiResult;
+  String _status;
 
   TextEditingController _ageFieldController = new TextEditingController();
   TextEditingController _heightFieldController = new TextEditingController();
@@ -26,6 +27,19 @@ class BMIState extends State<BmiHome> {
     if(height != null && weight != null) {
       setState(() {
         _bmiResult = (weight / (height * height)) * 703;
+
+        if (_bmiResult < 18.5) {
+          _status = 'UNDERWEIGHT';
+        }
+        else if (_bmiResult >= 18.5 && _bmiResult <= 24.9) {
+          _status = 'NORMAL';
+        }
+        else if (_bmiResult >= 25.0 && _bmiResult <= 29.9) {
+          _status = 'OVERWEIGHT';
+        }
+        else {
+          _status = 'OBESE';
+        }
       });
     }
   }
@@ -84,7 +98,9 @@ class BMIState extends State<BmiHome> {
             color: Colors.green,
             fontSize: 24.5,
 //            fontWeight: FontWeight.a
-          ),)
+          ),
+          ),
+          new Text(_status != null ? _status : '')
         ],
       ),
     );
