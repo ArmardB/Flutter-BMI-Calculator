@@ -11,8 +11,8 @@ class BmiHome extends StatefulWidget {
 
 class BMIState extends State<BmiHome> {
 
-
-  double _bmiResult;
+  double _calc;
+  String _bmiResult;
   String _status;
 
   TextEditingController _ageFieldController = new TextEditingController();
@@ -21,20 +21,21 @@ class BMIState extends State<BmiHome> {
 
   void _calculateBMI() {
 
-    int height = int.parse(_heightFieldController.text);
-    int weight = int.parse(_weightFieldController.text);
+    double height = double.parse(_heightFieldController.text);
+    double weight = double.parse(_weightFieldController.text);
 
     if(height != null && weight != null) {
       setState(() {
-        _bmiResult = (weight / (height * height)) * 703;
-
-        if (_bmiResult < 18.5) {
+        height = height * 12;
+        _calc = (weight / (height * height)) * 703;
+        _bmiResult = _calc.toStringAsFixed(2);
+        if (_calc < 18.5) {
           _status = 'UNDERWEIGHT';
         }
-        else if (_bmiResult >= 18.5 && _bmiResult <= 24.9) {
+        else if (_calc >= 18.5 && _calc <= 24.9) {
           _status = 'NORMAL';
         }
-        else if (_bmiResult >= 25.0 && _bmiResult <= 29.9) {
+        else if (_calc >= 25.0 && _calc <= 29.9) {
           _status = 'OVERWEIGHT';
         }
         else {
@@ -59,6 +60,8 @@ class BMIState extends State<BmiHome> {
           width: 150.0,
           ) ,
           new Container(
+            color: Colors.grey.shade300,
+            padding: const EdgeInsets.all(5.0),
             child: new Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
@@ -93,14 +96,26 @@ class BMIState extends State<BmiHome> {
             ),
           ),
           new Padding(padding: const EdgeInsets.all(5.5)),
-          new Text(_bmiResult != null ? _bmiResult : 'Enter your stats above',
-          style: new TextStyle(
-            color: Colors.green,
-            fontSize: 24.5,
+          new Container(
+            alignment: Alignment.topCenter,
+            child: new Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                new Text(_bmiResult != null ? 'BMI: $_bmiResult' : 'Enter your stats above',
+                  style: new TextStyle(
+                    color: Colors.green,
+                    fontSize: 24.5,
 //            fontWeight: FontWeight.a
+                  ),
+                ),
+                new Text(_status != null ? _status : '',
+                style: new TextStyle(
+                  fontSize: 28.0
+                ),)
+              ],
+            ),
           ),
-          ),
-          new Text(_status != null ? _status : '')
+
         ],
       ),
     );
